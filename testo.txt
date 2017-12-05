@@ -1,0 +1,6 @@
+ ciao, sono l'Ing. Riccardo Mearini e questo è un 'piccolo' corpus per testare:
+- questo è un sito https://www.facebook.com/ riccardo@email.it :)sito:P;
+- questi, invece sono multiword: ad hoc... 🔥gatti😂 ex nihilo!?
+- questa è una stringa contenente data-base ;Pqualche smiley: 🔥gatti😂  ;) :P
+- questa invece è  una data 20-Apr-2017...
+- anche questa è una data: 29/12/1995! 29/3/1901
