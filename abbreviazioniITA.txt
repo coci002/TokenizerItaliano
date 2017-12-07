@@ -91,3 +91,15 @@ V.le
 V.P.
 v.r.
 v.s.
+Gen.
+Feb.
+Mar.
+Apr.
+Mag.
+Giu.
+Lug.
+Ago.
+Set.
+Ott.
+Nov.
+Dic.

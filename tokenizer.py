@@ -8,7 +8,7 @@
 #due punti, punto e virgola: spesso separano due frasi, ma spesso è punteggiatura interna alla frase
 #idem, a volte usati per enumerazioni -> non considerare in italiano questi casi
 
-#espressioni multiparola: "et cetera", "ad hoc", "en vogue", "3.30pm", "Dic. 23 1990", proper names "Daimler Chrisler AG"(<- non curartene è Named Entity Recognition)
+#espressioni multiparola: "et cetera", "ad hoc", "en vogue", "3.30 pm", "Dic. 23 1990", proper names "Daimler Chrisler AG"(<- non curartene è Named Entity Recognition)
 #clitics: opposto delle mutliparola, da una sola parola, più token "amarlo", "l'essere"
 
 #dehypenation: togliere il trattino messo per spezzare una parola. 1) preprocessing-> pre- processing -> preprocessing
@@ -42,6 +42,10 @@ else:
 
 is_emoticon("XD")'''
 
+time_re = re.compile(r'^(([01]?\d|2[0-3])(:|.)([0-5]\d)|24:00)$')
+def is_time_format(s):
+    return bool(time_re.match(s))
+
 listaParole = []
 listaAbbreviazioni = []
 listaMultiparole = []
@@ -68,7 +72,6 @@ createList("testo0.txt", listaParole)
 #print(listaParole)
 createList("abbreviazioniITA.txt", listaAbbreviazioni)
 createListWhitespaces("multiWordExprITA.txt", listaMultiparole)
-print(listaMultiparole)
 
 
 #prova = "Nel.mezzo.del.cammin"
@@ -95,6 +98,8 @@ prova2=[]
 #print(prova2)
 
 def dotIsPunctuation(s, l):
+    if is_time_format(s):
+        return 0
     if s in listaAbbreviazioni:
         return 0
     #se ha un punto non alle estremità
@@ -106,7 +111,7 @@ def dotIsPunctuation(s, l):
             #se non è l'ultimo elemento della lista, guardo la parola seguente
             if index < len(l)-1:
                 #Se la prima lettera della parola seguente è maiuscola
-                if l[index+1][0].isupper():
+                if l[index+1][0].isupper() or l[index+1][0].isdigit():
                     return 1
                 else:
                     return 0
@@ -120,8 +125,11 @@ def isMultiword(s, l):
     if index < len(l)-1:
         multiword = s + ' '+l[index+1]
         if multiword in listaMultiparole:
-            print(multiword)
             return 1
+        if 'am' in l[index+1] or 'pm' in l[index+1]:
+            return 1
+        #23 dicembre 1990
+        #if s.isdigit()
     return 0
 
 def createToken(lista):
