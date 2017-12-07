@@ -44,6 +44,7 @@ is_emoticon("XD")'''
 
 listaParole = []
 listaAbbreviazioni = []
+listaMultiparole = []
 
 def createList(file, lista):
     with open(file) as f:
@@ -55,9 +56,19 @@ def createList(file, lista):
             for y in words:
                 lista.append(y)
 
+def createListWhitespaces(file, lista):
+    with open(file) as f:
+        content = f.readlines()
+        # you may also want to remove whitespace characters like `\n` at the end of each line
+        content = [x.strip('\n') for x in content]
+        for x in content:
+            lista.append(x)
+
 createList("testo0.txt", listaParole)
-print(listaParole)
+#print(listaParole)
 createList("abbreviazioniITA.txt", listaAbbreviazioni)
+createListWhitespaces("multiWordExprITA.txt", listaMultiparole)
+print(listaMultiparole)
 
 
 #prova = "Nel.mezzo.del.cammin"
@@ -88,7 +99,7 @@ def dotIsPunctuation(s, l):
         return 0
     #se ha un punto non alle estremità
     else:
-        if s.index('.')!= len(s)-1:
+        if s.find('.')!= len(s)-1:
             return 1
         else:
             index = l.index(s)
@@ -99,6 +110,19 @@ def dotIsPunctuation(s, l):
                     return 1
                 else:
                     return 0
+            #se è l'ultimo punto del documento, sicuramente è di punteggiatura
+            else:
+                return 1
+
+def isMultiword(s, l):
+    index = l.index(s)
+    #se non è l'ultimo elemento della lista, guardo la parola seguente
+    if index < len(l)-1:
+        multiword = s + ' '+l[index+1]
+        if multiword in listaMultiparole:
+            print(multiword)
+            return 1
+    return 0
 
 def createToken(lista):
     for x in lista:
@@ -112,6 +136,14 @@ def createToken(lista):
                 if y != '':
                     lista.insert(index+counter, y)
                     counter=counter+1
+    for x in lista:
+        if isMultiword(x, lista):
+            index = lista.index(x)
+            #concateno le parole (per ora solo lunghezza 2)
+            multiparola = lista[index] + ' ' + lista[index+1]
+            lista.pop(index)
+            lista.pop(index)
+            lista.insert(index, multiparola)
     return lista
 
 
