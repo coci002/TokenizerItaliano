@@ -95,10 +95,6 @@ def splitKeep(c, s):
         result = s
     return result
 
-prova2=[]
-#for x in listaParole:
-#    prova2.append(splitKeep('.', x))
-#print(prova2)
 
 def dotIsPunctuation(s, l):
     if "www" in s or "@" in s:
@@ -282,6 +278,23 @@ def createToken(lista):
                 lista.pop(index)
                 lista.insert(index, parola)
                 lista.insert(index+1, clitico)
+    #gestione emoji
+    for x in lista:
+        for carattere in x:
+            print(carattere)
+            print(is_emoji(carattere))
+            if is_emoji(carattere):
+                parole = splitKeep(carattere, x)
+                index = lista.index(x)
+                #print(lista)
+                lista.pop(index)
+                #print(parole)
+                counter = 0
+                for y in parole:
+                    if y != '':
+                        lista.insert(index+counter, y)
+                        counter=counter+1
+                break
     return lista
 
 
