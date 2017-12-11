@@ -240,6 +240,15 @@ def createToken(lista):
             lista.pop(index)
             lista.pop(index)
             lista.insert(index, data)
+    #gestisce la dehypenation
+    for x in lista:
+        index = lista.index(x)
+        #non considero i casi in cui c'è solamente la "-"
+        if '-' in x and len(x)>1 and index<len(lista):
+            parola = x[0:len(x)-1]+lista[index+1]
+            lista.pop(index)
+            lista.pop(index)
+            lista.insert(index, parola)
     return lista
 
 
