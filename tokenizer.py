@@ -152,6 +152,51 @@ def createToken(lista):
                 if y != '':
                     lista.insert(index+counter, y)
                     counter=counter+1
+        if '!' in x:
+            parole = splitKeep('!', x)
+            index = lista.index(x)
+            lista.pop(index)
+            counter = 0
+            for y in parole:
+                if y != '':
+                    lista.insert(index+counter, y)
+                    counter=counter+1
+        if '?' in x:
+            parole = splitKeep('?', x)
+            index = lista.index(x)
+            lista.pop(index)
+            counter = 0
+            for y in parole:
+                if y != '':
+                    lista.insert(index+counter, y)
+                    counter=counter+1
+        if ':' in x:
+            parole = splitKeep(':', x)
+            index = lista.index(x)
+            lista.pop(index)
+            counter = 0
+            for y in parole:
+                if y != '':
+                    lista.insert(index+counter, y)
+                    counter=counter+1
+        if ';' in x:
+            parole = splitKeep(';', x)
+            index = lista.index(x)
+            lista.pop(index)
+            counter = 0
+            for y in parole:
+                if y != '':
+                    lista.insert(index+counter, y)
+                    counter=counter+1
+        if ',' in x:
+            parole = splitKeep(',', x)
+            index = lista.index(x)
+            lista.pop(index)
+            counter = 0
+            for y in parole:
+                if y != '':
+                    lista.insert(index+counter, y)
+                    counter=counter+1
     for x in lista:
         if isMultiword(x, lista):
             index = lista.index(x)
