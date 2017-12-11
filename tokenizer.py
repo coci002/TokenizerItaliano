@@ -99,6 +99,8 @@ prova2=[]
 #print(prova2)
 
 def dotIsPunctuation(s, l):
+    if "www" in s or "@" in s:
+        return 0
     if is_time_format(s):
         return 0
     if s in listaAbbreviazioni:
@@ -138,6 +140,16 @@ def isDate(s,l):
         #Formati ammessi: 23 Dic 1990 oppure Dic. 23 1990
         if (s.isdigit() and l[index+2].isdigit() and l[index+1] in listaMesi) or (s in listaMesi and l[index+2].isdigit() and l[index+1].isdigit()):
             return 1
+    return 0
+
+def isClitic(s):
+    #"gli" è un caso a parte
+    clitic = ["mi", "ti", "ci", "vi", "lo", "la", "li", "le", "ne", "si"]
+    for x in clitic:
+        if s.endswith(x) and (s[len(s)-3] == 'r'):
+            return 1
+    if s.endswith('gli') and (s[len(s)-4] == 'r'):
+        return 2
     return 0
 
 def createToken(lista):
@@ -249,6 +261,21 @@ def createToken(lista):
             lista.pop(index)
             lista.pop(index)
             lista.insert(index, parola)
+    for x in lista:
+        index = lista.index(x)
+        if isClitic(x) == 1:
+            parola = x[0:len(x)-2]
+            clitico = x[len(x)-2:len(x)]
+            lista.pop(index)
+            lista.insert(index, parola)
+            lista.insert(index+1, clitico)
+        else:
+            if isClitic(x) == 2:
+                parola = x[0:len(x)-3]
+                clitico = x[len(x)-3:len(x)]
+                lista.pop(index)
+                lista.insert(index, parola)
+                lista.insert(index+1, clitico)
     return lista
 
 
