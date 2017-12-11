@@ -49,6 +49,7 @@ def is_time_format(s):
 listaParole = []
 listaAbbreviazioni = []
 listaMultiparole = []
+listaMesi = []
 
 def createList(file, lista):
     with open(file) as f:
@@ -69,9 +70,9 @@ def createListWhitespaces(file, lista):
             lista.append(x)
 
 createList("testo0.txt", listaParole)
-#print(listaParole)
 createList("abbreviazioniITA.txt", listaAbbreviazioni)
 createListWhitespaces("multiWordExprITA.txt", listaMultiparole)
+createList("mesi.txt", listaMesi)
 
 
 #prova = "Nel.mezzo.del.cammin"
@@ -128,8 +129,15 @@ def isMultiword(s, l):
             return 1
         if 'am' in l[index+1] or 'pm' in l[index+1]:
             return 1
-        #23 dicembre 1990
-        #if s.isdigit()
+    return 0
+
+def isDate(s,l):
+    index = l.index(s)
+    #se ha due parole che la seguono
+    if index < len(l)-2:
+        #Formati ammessi: 23 Dic 1990 oppure Dic. 23 1990
+        if (s.isdigit() and l[index+2].isdigit() and l[index+1] in listaMesi) or (s in listaMesi and l[index+2].isdigit() and l[index+1].isdigit()):
+            return 1
     return 0
 
 def createToken(lista):
@@ -152,6 +160,16 @@ def createToken(lista):
             lista.pop(index)
             lista.pop(index)
             lista.insert(index, multiparola)
+
+    for x in lista:
+        if isDate(x, lista):
+            index = lista.index(x)
+            #concateno data anno e mese
+            data = lista[index] + ' ' + lista[index+1]+ ' ' + lista[index+2]
+            lista.pop(index)
+            lista.pop(index)
+            lista.pop(index)
+            lista.insert(index, data)
     return lista
 
 
