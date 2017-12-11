@@ -50,6 +50,7 @@ listaParole = []
 listaAbbreviazioni = []
 listaMultiparole = []
 listaMesi = []
+listaParoleTrattino = []
 
 def createList(file, lista):
     with open(file) as f:
@@ -73,6 +74,7 @@ createList("testo0.txt", listaParole)
 createList("abbreviazioniITA.txt", listaAbbreviazioni)
 createListWhitespaces("multiWordExprITA.txt", listaMultiparole)
 createList("mesi.txt", listaMesi)
+createList("paroleConTrattino.txt", listaParoleTrattino)
 
 
 #prova = "Nel.mezzo.del.cammin"
@@ -256,8 +258,12 @@ def createToken(lista):
     for x in lista:
         index = lista.index(x)
         #non considero i casi in cui c'è solamente la "-"
-        if '-' in x and len(x)>1 and index<len(lista):
-            parola = x[0:len(x)-1]+lista[index+1]
+        if x.endswith("-") and len(x)>1 and index<len(lista):
+            tmp = x[0:len(x)]+lista[index+1]
+            if tmp in listaParoleTrattino:
+                parola = tmp
+            else:
+                parola = x[0:len(x)-1]+lista[index+1]
             lista.pop(index)
             lista.pop(index)
             lista.insert(index, parola)
