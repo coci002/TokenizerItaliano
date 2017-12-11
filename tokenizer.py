@@ -28,11 +28,10 @@ def is_emoji(s):
     return s in UNICODE_EMOJI
 
 def is_emoticon(s):
-    if (re.search(r"^[(>:#;=*[8|\-B/\\@<~^%$LXoO0}3Vb][a-zA-Z0-9',v(>:#;=*+[8|\-B/\\@<~^%$LXoO0}3Vb)]*$",s)):
-        print("è una emoticon")
+    #if (re.search(r"^[(>:#;=*[8|\-B/\\@<~^%$LXO0}3Vb][a-zA-Z0-9',v(>:#;=*+[8|\-B/\\@<~^%$LXoO0}3Vb)]*$",s)):
+    if s in [":D", ":(", "XD", ":-D", ":-(", ";)", ":-D"]:
         return 1
     else:
-        print("non è una emoticon")
         return 0
 
 '''if (is_emoji("🔥")):
@@ -162,6 +161,52 @@ def createToken(lista):
                 if y != '':
                     lista.insert(index+counter, y)
                     counter=counter+1
+
+    for x in lista:
+        if is_emoticon(x[0:2]):
+            index = lista.index(x)
+            emoticon = x[0:2]
+            parola = x[2:len(x)]
+            print(x)
+            print(emoticon)
+            print(parola)
+            lista.pop(index)
+            if emoticon != '':
+                lista.insert(index, emoticon)
+            if parola != '':
+                lista.insert(index+1, parola)
+            print(lista)
+        else:
+            if is_emoticon(x[0:3]):
+                index = lista.index(x)
+                emoticon = x[0:3]
+                parola = x[3:len(x)]
+                lista.pop(index)
+                if emoticon != '':
+                    lista.insert(index, emoticon)
+                if parola != '':
+                    lista.insert(index+1, parola)
+            else:
+                if is_emoticon(x[len(x)-2:len(x)]):
+                    index = lista.index(x)
+                    parola = x[0:len(x)-2]
+                    emoticon = x[len(x)-2:len(x)]
+                    lista.pop(index)
+                    if emoticon != '':
+                        lista.insert(index, emoticon)
+                    if parola != '':
+                        lista.insert(index, parola)
+                else:
+                    if is_emoticon(x[len(x)-3:len(x)]):
+                        index = lista.index(x)
+                        parola = x[0:len(x)-3]
+                        emoticon = x[len(x)-3:len(x)]
+                        lista.pop(index)
+                        if emoticon != '':
+                            lista.insert(index, emoticon)
+                        if parola != '':
+                            lista.insert(index, parola)
+
     for x in lista:
         if '!' in x:
             parole = splitKeep('!', x)
@@ -183,7 +228,7 @@ def createToken(lista):
                     lista.insert(index+counter, y)
                     counter=counter+1
     for x in lista:
-        if ':' in x:
+        if ':' in x and not is_emoticon(x):
             parole = splitKeep(':', x)
             index = lista.index(x)
             lista.pop(index)
@@ -193,7 +238,7 @@ def createToken(lista):
                     lista.insert(index+counter, y)
                     counter=counter+1
     for x in lista:
-        if ';' in x:
+        if ';' in x and not is_emoticon(x):
             parole = splitKeep(';', x)
             index = lista.index(x)
             lista.pop(index)
@@ -281,20 +326,17 @@ def createToken(lista):
     #gestione emoji
     for x in lista:
         for carattere in x:
-            print(carattere)
-            print(is_emoji(carattere))
             if is_emoji(carattere):
                 parole = splitKeep(carattere, x)
                 index = lista.index(x)
-                #print(lista)
                 lista.pop(index)
-                #print(parole)
                 counter = 0
                 for y in parole:
                     if y != '':
                         lista.insert(index+counter, y)
                         counter=counter+1
                 break
+
     return lista
 
 
