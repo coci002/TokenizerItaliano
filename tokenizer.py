@@ -29,7 +29,7 @@ def is_emoji(s):
 
 def is_emoticon(s):
     #if (re.search(r"^[(>:#;=*[8|\-B/\\@<~^%$LXO0}3Vb][a-zA-Z0-9',v(>:#;=*+[8|\-B/\\@<~^%$LXoO0}3Vb)]*$",s)):
-    if s in [":D", ":(", "XD", ":-D", ":-(", ";)", ":-D"]:
+    if s in [":D", ":(", "XD", ":-D", ":-(", ";)", ":-D", ";P", ":P"]:
         return 1
     else:
         return 0
@@ -228,7 +228,7 @@ def createToken(lista):
                     lista.insert(index+counter, y)
                     counter=counter+1
     for x in lista:
-        if ':' in x and not is_emoticon(x):
+        if ':' in x and not is_emoticon(x) and not x.startswith("http"):
             parole = splitKeep(':', x)
             index = lista.index(x)
             lista.pop(index)
@@ -341,4 +341,5 @@ def createToken(lista):
 
 
 lista2 = createToken(listaParole)
-print(lista2)
+for x in lista2:
+    print(x)
