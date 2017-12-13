@@ -50,6 +50,7 @@ listaAbbreviazioni = []
 listaMultiparole = []
 listaMesi = []
 listaParoleTrattino = []
+listaNonClitici = []
 
 def createList(file, lista):
     with open(file) as f:
@@ -59,6 +60,17 @@ def createList(file, lista):
         for x in content:
             words = x.split()
             for y in words:
+                lista.append(y)
+
+def createList2(file, lista):
+    with open(file) as f:
+        content = f.readlines()
+        # you may also want to remove whitespace characters like `\n` at the end of each line
+        content = [x.strip('\n') for x in content]
+        for x in content:
+            words = x.split()
+            for y in words:
+                lista.append(y.lower())
                 lista.append(y)
 
 def createListWhitespaces(file, lista):
@@ -74,6 +86,7 @@ createList("abbreviazioniITA.txt", listaAbbreviazioni)
 createListWhitespaces("multiWordExprITA.txt", listaMultiparole)
 createList("mesi.txt", listaMesi)
 createList("paroleConTrattino.txt", listaParoleTrattino)
+createList2("nonclitici.txt", listaNonClitici)
 
 
 #prova = "Nel.mezzo.del.cammin"
@@ -111,7 +124,7 @@ def dotIsPunctuation(s, l):
             #se non è l'ultimo elemento della lista, guardo la parola seguente
             if index < len(l)-1:
                 #Se la prima lettera della parola seguente è maiuscola
-                if l[index+1][0].isupper() or l[index+1][0].isdigit():
+                if l[index+1][0].isupper() or l[index+1][0].isdigit() or is_emoji(l[index+1][0]) or is_emoticon(l[index+1][0]):
                     return 1
                 else:
                     return 0
@@ -126,7 +139,7 @@ def isMultiword(s, l):
         multiword = s + ' '+l[index+1]
         if multiword in listaMultiparole:
             return 1
-        if 'am' in l[index+1] or 'pm' in l[index+1]:
+        if 'am' == l[index+1] or 'pm' == l[index+1]:
             return 1
     return 0
 
@@ -149,6 +162,17 @@ def isClitic(s):
         return 2
     return 0
 
+def isCliticCumulo(s):
+    clitic = ["lo", "la", "li", "le", "ne"]
+    for x in clitic:
+        if s.endswith(x) and s not in listaNonClitici:
+            radice = s[0:len(s)-2]
+            if radice.endswith("me") or radice.endswith("te") or radice.endswith("ce"):
+                return 1
+            if radice.endswith("glie"):
+                return 2
+    return 0
+
 def createToken(lista):
     for x in lista:
         #vado a spezzare la parola col punto se contiene un punto e se questo è un punto di punteggiatura
@@ -167,15 +191,11 @@ def createToken(lista):
             index = lista.index(x)
             emoticon = x[0:2]
             parola = x[2:len(x)]
-            print(x)
-            print(emoticon)
-            print(parola)
             lista.pop(index)
             if emoticon != '':
                 lista.insert(index, emoticon)
             if parola != '':
                 lista.insert(index+1, parola)
-            print(lista)
         else:
             if is_emoticon(x[0:3]):
                 index = lista.index(x)
@@ -323,6 +343,25 @@ def createToken(lista):
                 lista.pop(index)
                 lista.insert(index, parola)
                 lista.insert(index+1, clitico)
+    for x in lista:
+        index = lista.index(x)
+        if isCliticCumulo(x) == 1:
+            parola = x[0:len(x)-4]
+            pronome = x[len(x)-4:len(x)-2]
+            clitico = x[len(x)-2:len(x)]
+            lista.pop(index)
+            lista.insert(index, parola)
+            lista.insert(index+1, pronome)
+            lista.insert(index+2, clitico)
+        else:
+            if isCliticCumulo(x) == 2:
+                parola = x[0:len(x)-6]
+                pronome = x[len(x)-6:len(x)-2]
+                clitico = x[len(x)-2:len(x)]
+                lista.pop(index)
+                lista.insert(index, parola)
+                lista.insert(index+1, pronome)
+                lista.insert(index+2, clitico)
     #gestione emoji
     for x in lista:
         for carattere in x:
