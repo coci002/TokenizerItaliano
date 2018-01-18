@@ -45,6 +45,10 @@ time_re = re.compile(r'^(([01]?\d|2[0-3])(:|.)([0-5]\d)|24:00)$')
 def is_time_format(s):
     return bool(time_re.match(s))
 
+decimalNumRe = re.compile('[0-9]+\.[0-9]+')
+def is_decimal(s):
+    return bool(decimalNumRe.match(s))
+
 listaParole = []
 listaAbbreviazioni = []
 listaMultiparole = []
@@ -112,6 +116,8 @@ def dotIsPunctuation(s, l):
     if "www" in s or "@" in s:
         return 0
     if is_time_format(s):
+        return 0
+    if is_decimal(s):
         return 0
     if s in listaAbbreviazioni:
         return 0
