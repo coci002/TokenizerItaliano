@@ -121,6 +121,9 @@ def dotIsPunctuation(s, l):
         return 0
     if s in listaAbbreviazioni:
         return 0
+    for i in listaAbbreviazioni:
+        if i in s:
+            return 0
     #se ha un punto non alle estremità
     else:
         if s.find('.')!= len(s)-1:
@@ -275,8 +278,6 @@ def createToken(lista):
                     counter=counter+1
     for x in lista:
         if ',' in x:
-            parole = splitKeep(',', x)
-            index = lista.index(x)
             lista.pop(index)
             counter = 0
             for y in parole:
@@ -285,7 +286,9 @@ def createToken(lista):
                     counter=counter+1
     for x in lista:
         if '\'' in x:
+            print(x)
             parole = splitKeep('\'', x)
+            print(parole)
             index = lista.index(x)
             lista.pop(index)
             counter = 0
